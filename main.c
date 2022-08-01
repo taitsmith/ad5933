@@ -46,5 +46,19 @@ int main() {
     //start sweep
     ad5933_start_sweep(&ad5933Dev);
 
+    //calculate gain @ 47kohms (change as needed)
+    gainFactor = ad5933_calculate_gain_factor(&ad5933Dev,
+                                              47000, //change this if needed
+                                              AD5933_FUNCTION_REPEAT_FREQ);
+
+    while(1) {
+        impedance = ad5933_calculate_impedance(&ad5933Dev,
+                                               gainFactor,
+                                               AD5933_FUNCTION_REPEAT_FREQ);
+        impedanceK = (float) impedance;
+        impedanceK /= 1000;
+
+        printf("%f", impedanceK); //display
+    }
     return 0;
 }
